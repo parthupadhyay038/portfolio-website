@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface TicTacToeProps {
   mode: 'single' | 'multi';
@@ -6,6 +6,26 @@ interface TicTacToeProps {
 }
 
 type Player = 'X' | 'O' | null;
+
+// Calculate winner - outside component for stability
+const calculateWinner = (squares: Player[]): Player => {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (const [a, b, c] of lines) {
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+};
 
 const TicTacToe: React.FC<TicTacToeProps> = ({ mode, onBack }) => {
   const [board, setBoard] = useState<Player[]>(Array(9).fill(null));
@@ -16,50 +36,26 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ mode, onBack }) => {
   // Get current player
   const currentPlayer = isXNext ? 'X' : 'O';
 
-  // Calculate winner
-  const calculateWinner = (squares: Player[]) => {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
-      }
-    }
-    return null;
-  };
-
-  // Bot AI - minimax algorithm
-  const getBotMove = (squares: Player[]) => {
+  // Bot AI - memoized
+  const getBotMove = useCallback((squares: Player[]): number => {
     const availableMoves = squares
       .map((val, idx) => (val === null ? idx : null))
-      .filter((val) => val !== null);
+      .filter((val): val is number => val !== null);
 
     if (availableMoves.length === 0) return -1;
 
-    // Simple strategy: try to win, block opponent, take center, take corner, take edge
-    const testMove = (testSquares: Player[], move: number, player: Player) => {
-      const copy = [...testSquares];
-      copy[move] = player;
-      return calculateWinner(copy) === player;
-    };
-
     // Try to win
-    for (let move of availableMoves) {
-      if (testMove(squares, move, 'O')) return move;
+    for (const move of availableMoves) {
+      const copy = [...squares];
+      copy[move] = 'O';
+      if (calculateWinner(copy) === 'O') return move;
     }
 
     // Block opponent
-    for (let move of availableMoves) {
-      if (testMove(squares, move, 'X')) return move;
+    for (const move of availableMoves) {
+      const copy = [...squares];
+      copy[move] = 'X';
+      if (calculateWinner(copy) === 'X') return move;
     }
 
     // Take center
@@ -67,94 +63,107 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ mode, onBack }) => {
 
     // Take corners
     const corners = [0, 2, 6, 8].filter((c) => availableMoves.includes(c));
-    if (corners.length > 0) return corners[Math.floor(Math.random() * corners.length)];
+    if (corners.length > 0) {
+      return corners[Math.floor(Math.random() * corners.length)];
+    }
 
     // Take any available
     return availableMoves[Math.floor(Math.random() * availableMoves.length)];
-  };
+  }, []);
 
-  // Handle cell click
-  const handleClick = (index: number) => {
-    if (board[index] !== null || winner || gameOver) return;
+  // Handle cell click for single player
+  const handleClick = useCallback((index: number) => {
+    setBoard((prevBoard) => {
+      if (prevBoard[index] !== null || winner || gameOver) return prevBoard;
 
-    const newBoard = [...board];
-    newBoard[index] = 'X';
-    setBoard(newBoard);
+      const newBoard = [...prevBoard];
+      newBoard[index] = 'X';
 
-    const gameWinner = calculateWinner(newBoard);
-    if (gameWinner) {
-      setWinner(gameWinner);
-      setGameOver(true);
-      return;
-    }
+      const gameWinner = calculateWinner(newBoard);
+      if (gameWinner) {
+        setWinner(gameWinner);
+        setGameOver(true);
+        return newBoard;
+      }
 
-    if (newBoard.every((cell) => cell !== null)) {
-      setGameOver(true);
-      return;
-    }
+      if (newBoard.every((cell) => cell !== null)) {
+        setGameOver(true);
+        return newBoard;
+      }
 
-    setIsXNext(false);
-  };
+      setIsXNext(false);
+      return newBoard;
+    });
+  }, [winner, gameOver]);
 
   // Bot move effect for single player
   useEffect(() => {
-    if (mode === 'single' && !isXNext && !winner && !gameOver) {
-      const timer = setTimeout(() => {
-        const botMove = getBotMove(board);
-        if (botMove !== -1) {
-          const newBoard = [...board];
-          newBoard[botMove] = 'O';
-          setBoard(newBoard);
+    if (mode !== 'single' || isXNext || winner || gameOver) {
+      return;
+    }
 
-          const gameWinner = calculateWinner(newBoard);
-          if (gameWinner) {
-            setWinner(gameWinner);
-            setGameOver(true);
-            return;
-          }
+    const timer = setTimeout(() => {
+      setBoard((prevBoard) => {
+        // Double-check conditions since state might have changed
+        const gameWinner = calculateWinner(prevBoard);
+        if (gameWinner || prevBoard.every((cell) => cell !== null)) {
+          return prevBoard;
+        }
 
-          if (newBoard.every((cell) => cell !== null)) {
-            setGameOver(true);
-            return;
-          }
+        const botMove = getBotMove(prevBoard);
+        if (botMove === -1) return prevBoard;
 
+        const newBoard = [...prevBoard];
+        newBoard[botMove] = 'O';
+
+        const updatedWinner = calculateWinner(newBoard);
+        if (updatedWinner) {
+          setWinner(updatedWinner);
+          setGameOver(true);
+        } else if (newBoard.every((cell) => cell !== null)) {
+          setGameOver(true);
+        } else {
           setIsXNext(true);
         }
-      }, 600);
 
-      return () => clearTimeout(timer);
-    }
-  }, [isXNext, mode, board, winner, gameOver]);
+        return newBoard;
+      });
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [mode, isXNext, winner, gameOver, getBotMove]);
 
   // Handle multiplayer click
-  const handleMultiClick = (index: number) => {
-    if (board[index] !== null || winner || gameOver) return;
+  const handleMultiClick = useCallback((index: number) => {
+    setBoard((prevBoard) => {
+      if (prevBoard[index] !== null || winner || gameOver) return prevBoard;
 
-    const newBoard = [...board];
-    newBoard[index] = currentPlayer;
-    setBoard(newBoard);
+      const newBoard = [...prevBoard];
+      newBoard[index] = isXNext ? 'X' : 'O';
 
-    const gameWinner = calculateWinner(newBoard);
-    if (gameWinner) {
-      setWinner(gameWinner);
-      setGameOver(true);
-      return;
-    }
+      const gameWinner = calculateWinner(newBoard);
+      if (gameWinner) {
+        setWinner(gameWinner);
+        setGameOver(true);
+        return newBoard;
+      }
 
-    if (newBoard.every((cell) => cell !== null)) {
-      setGameOver(true);
-      return;
-    }
+      if (newBoard.every((cell) => cell !== null)) {
+        setGameOver(true);
+        return newBoard;
+      }
 
-    setIsXNext(!isXNext);
-  };
+      setIsXNext(!isXNext);
+      return newBoard;
+    });
+  }, [isXNext, winner, gameOver]);
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     setBoard(Array(9).fill(null));
     setIsXNext(true);
     setWinner(null);
     setGameOver(false);
-  };
+  }, []);
 
   const isBoardFull = board.every((cell) => cell !== null);
 
