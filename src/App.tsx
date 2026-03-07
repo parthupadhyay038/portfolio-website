@@ -2,15 +2,27 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Welcome from './components/Welcome';
 import TicTacToe from './components/TicTacToe';
+import GameLauncher from './components/GameLauncher';
 import Portfolio from './components/Portfolio/Portfolio';
 import { Gamepad2, Briefcase } from 'lucide-react';
 
-type GameMode = 'welcome' | 'single' | 'multi';
+type GameMode = 'launcher' | 'welcome' | 'single' | 'multi';
 type AppMode = 'game' | 'portfolio';
 
 const App: React.FC = () => {
   const [appMode, setAppMode] = useState<AppMode>('portfolio');
-  const [gameMode, setGameMode] = useState<GameMode>('welcome');
+  const [gameMode, setGameMode] = useState<GameMode>('launcher');
+
+  const handleSelectGame = (gameType: 'snake' | 'tictactoe') => {
+    if (gameType === 'tictactoe') {
+      setGameMode('welcome');
+    } else if (gameType === 'snake') {
+      // Open snake game GitHub repo with instructions
+      window.open('https://github.com/parthupadhyay038/portfolio-website/tree/main/games', '_blank');
+      // Keep launcher visible for user to try other games
+      setGameMode('launcher');
+    }
+  };
 
   const handleStartGame = (mode: 'single' | 'multi') => {
     setGameMode(mode);
@@ -21,13 +33,13 @@ const App: React.FC = () => {
       setAppMode('game');
       setGameMode('welcome');
     } else if (gameType === 'snake') {
-      // Open snake game (external or guide)
-      window.open('https://github.com/parthupadhyay038/portfolio-website/tree/main/games', '_blank');
+      setAppMode('game');
+      setGameMode('launcher');
     }
   };
 
   const handleBack = () => {
-    setGameMode('welcome');
+    setGameMode('launcher');
   };
 
   return (
@@ -80,6 +92,7 @@ const App: React.FC = () => {
 
       {appMode === 'game' && (
         <div className="w-full min-h-screen">
+          {gameMode === 'launcher' && <GameLauncher onSelectGame={handleSelectGame} />}
           {gameMode === 'welcome' && <Welcome onStartGame={handleStartGame} />}
           {gameMode === 'single' && <TicTacToe mode="single" onBack={handleBack} />}
           {gameMode === 'multi' && <TicTacToe mode="multi" onBack={handleBack} />}

@@ -13,13 +13,15 @@
 
 ## 🎯 Project Overview
 
-This is a **Full Stack Developer Portfolio** combined with an **Interactive Tic Tac Toe Game**. It showcases modern web development practices with:
+This is a **Full Stack Developer Portfolio** combined with **Interactive Games** (Tic Tac Toe & Python Snake). It showcases modern web development practices with:
 
 - **Modern UI/UX**: Smooth animations and interactive elements
 - **Responsive Design**: Works perfectly on desktop, tablet, and mobile
 - **Production-Ready**: Type-safe TypeScript, optimized build, and deployment-ready
-- **Gaming Demo**: AI-powered Tic Tac Toe game showcasing algorithmic thinking
-- **Portfolio Sections**: Hero, Tech Stack, Projects, Architecture, Terminal, GitHub Activity, Contact
+- **Gaming Collection**: 
+  - 🎯 **Tic Tac Toe**: AI-powered game with Minimax algorithm (browser-based)
+  - 🐍 **Snake Game**: Classic gameplay with Python & Pygame (desktop application)
+- **Portfolio Sections**: Hero, Tech Stack, Projects, Architecture, Terminal, Games, GitHub Activity, Contact
 
 ---
 
@@ -119,7 +121,8 @@ React 18.3.1
 ```
 src/
 ├── components/
-│   ├── Welcome.tsx                    # Game mode selection
+│   ├── GameLauncher.tsx               # Game selection interface
+│   ├── Welcome.tsx                    # Tic Tac Toe mode selection
 │   ├── TicTacToe.tsx                  # Game logic & UI
 │   └── Portfolio/
 │       ├── Portfolio.tsx              # Main portfolio container
@@ -128,16 +131,49 @@ src/
 │       ├── Projects.tsx               # Featured projects showcase
 │       ├── Architecture.tsx           # System architecture diagram
 │       ├── Terminal.tsx               # Interactive terminal CLI
+│       ├── Games.tsx                  # Games showcase section
 │       ├── GitHubActivity.tsx         # GitHub stats & activity
 │       └── Contact.tsx                # Contact & social links
 ├── App.tsx                            # Main app with mode switcher
 ├── main.tsx                           # React DOM entry point
 └── index.css                          # Global Tailwind styles
+
+games/
+├── snake_game.py                      # Main Snake game (Python/Pygame)
+├── launcher.py                        # Game menu system (Python)
+├── launcher.bat                       # Windows quick-start launcher
+├── setup.bat                          # Pygame auto-installer
+└── README.md                          # Games documentation
 ```
 
 ---
 
 ## 🔄 How It Works - Component Data Flow
+
+### Main Application Flow
+
+```
+App.tsx (Root Component)
+├── Mode: 'portfolio'
+│   └── Portfolio Component
+│       ├── Navigation + Mode Switcher
+│       ├── Hero, TechStack, Projects
+│       ├── Architecture, Terminal, Games
+│       ├── GitHubActivity, Contact
+│       └── handlePlayGame Callback
+│           ├── Tic Tac Toe → setAppMode('game'), setGameMode('welcome')
+│           └── Snake → setAppMode('game'), setGameMode('launcher')
+│
+└── Mode: 'game'
+    └── GameLauncher (Initial Game Selection)
+        ├── Tic Tac Toe Card
+        │   └── onClick → Welcome (Mode Selection)
+        │       ├── Single Player → TicTacToe (AI mode)
+        │       └── Multiplayer → TicTacToe (Multi mode)
+        └── Snake Card
+            └── onClick → Opens GitHub with instructions
+                (User downloads and runs locally)
+```
 
 ### Portfolio Component Hierarchy
 
@@ -152,45 +188,42 @@ Portfolio (Main Container)
 │   └── Scroll indicator animation
 ├── TechStack
 │   ├── Container with staggered animations
-│   ├── Frontend Technologies
-│   │   ├── React, TypeScript, Redux, Tailwind
-│   │   └── Interactive hover cards
-│   ├── Backend Technologies
-│   │   ├── Python, Django, DRF, PostgreSQL
-│   │   └── Interactive hover cards
-│   └── Tools & DevOps
-│       ├── Git, GitHub, Vercel, Docker
-│       └── Interactive hover cards
+│   ├── Frontend Technologies (React, TypeScript, etc.)
+│   ├── Backend Technologies (Python, Django, etc.)
+│   └── Tools & DevOps (Git, GitHub, Vercel, etc.)
 ├── Projects
 │   ├── Project Grid (4 featured projects)
-│   ├── Each Project Card includes:
-│   │   ├── Project name & description
-│   │   ├── Technology tags
-│   │   ├── GitHub & Live Demo links
-│   │   └── Expandable architecture modal
-│   └── Modal with AnimatePresence
+│   └── Each Card with Name, Tech, Links & Modal
 ├── Architecture
-│   ├── System diagram with 3 layers:
-│   │   ├── Frontend Layer (React, TypeScript, Redux, Tailwind)
-│   │   ├── API Layer (Django REST, TypeScript, Validation)
-│   │   └── Database Layer (PostgreSQL)
-│   ├── Animated arrows showing data flow
-│   └── Responsive design (Desktop/Mobile)
+│   ├── 3-Layer System Diagram
+│   │   ├── Frontend Layer
+│   │   ├── API Layer
+│   │   └── Database Layer
+│   └── Animated data flow arrows
 ├── Terminal
-│   ├── Interactive command-line interface
+│   ├── Interactive CLI Interface
 │   ├── Commands: help, projects, skills, about, contact, clear
 │   ├── Command history with auto-scroll
 │   └── Quick command buttons
+├── Games
+│   ├── Tic Tac Toe Showcase Card
+│   │   ├── Features list
+│   │   ├── Tech stack
+│   │   └── "Play Now" button
+│   ├── Snake Game Showcase Card
+│   │   ├── Features list
+│   │   ├── Tech stack
+│   │   └── "View Instructions" button
+│   └── "How to Play" detailed guide
 ├── GitHubActivity
 │   ├── Stats Grid (Repos, Stars, Forks, Contributions)
 │   ├── Weekly Activity Chart (Bar chart)
-│   ├── Recent Projects List (4 projects)
+│   ├── Recent Projects List
 │   └── "View More" CTA
 └── Contact
-    ├── Three Contact Cards (GitHub, LinkedIn, Email)
-    ├── Each with icon, label, value
-    ├── Hover animations
-    └── "Send Email" CTA button
+    ├── Contact Information Cards
+    ├── Social Links
+    └── Email CTA Button
 
 Footer
 └── Copyright, social links, tech stack mention
@@ -199,19 +232,24 @@ Footer
 ### Tic Tac Toe Component Hierarchy
 
 ```
-App (Mode: game)
-├── Welcome
-│   ├── Title & Description
-│   ├── Start Single Player Button
-│   ├── Start Multi Player Button
-│   └── Optional: Return to Portfolio
-└── TicTacToe (when game mode active)
-    ├── Game Board (3x3 grid)
-    ├── Game Status (Turn indicator)
-    ├── AI Bot Logic (Single player mode)
-    │   └── Minimax Algorithm for optimal moves
-    ├── Reset Button
-    └── Back Button (return to Welcome)
+App (Mode: 'game', GameMode: 'launcher')
+├── GameLauncher ← NEW UNIFIED LAUNCHER
+│   ├── Tic Tac Toe Card
+│   ├── Snake Game Card
+│   └── Instructions & Tips
+│
+└── Welcome (when Tic Tac Toe selected)
+    ├── Title "Tic Tac Toe 🎯"
+    ├── Play vs Bot Button
+    ├── Multiplayer Button
+    └── Game Mode Selection Header
+        └── TicTacToe Component (Game Active)
+            ├── Game Board (3x3 grid)
+            ├── Game Status (Turn indicator)
+            ├── AI Bot Logic (if Single Player)
+            │   └── Minimax Algorithm for optimal moves
+            ├── Reset Button
+            └── Back Button (returns to GameLauncher)
 ```
 
 ---
@@ -429,6 +467,15 @@ Player Makes Move
 
 ## 🎯 Feature Breakdown
 
+### **Game Launcher** ⭐ NEW
+- **Unified Game Selection Interface**: Beautiful dual-card interface for game selection
+- **Tic Tac Toe Card**: Shows features, tech stack, and AI difficulty info
+- **Snake Game Card**: Displays setup instructions and gameplay features  
+- **Interactive Cards**: Hover animations with gradient overlays and glow effects
+- **Responsive Layout**: 2-column on desktop, 1-column on mobile
+- **Quick Navigation**: One-click access to both games
+- **Smooth Transitions**: Framer Motion animations between game selection and gameplay
+
 ### **Hero Section**
 - **Animated Background**: Floating elements with continuous animation
 - **Gradient Text**: Main heading with blue-to-purple gradient
@@ -459,6 +506,13 @@ Player Makes Move
 - **Quick Buttons**: Shortcuts for common commands
 - **Loading State**: Visual feedback while processing
 
+### **Games Showcase Section**
+- **Game Collection Cards**: Display both Tic Tac Toe and Snake games
+- **Features & Technologies**: Each game showcases its tech stack
+- **Play Integration**: Direct links to play games from portfolio
+- **How to Play Guide**: Detailed instructions for both games
+- **Desktop vs Browser**: Clear distinction between Snake (desktop) and Tic Tac Toe (browser)
+
 ### **GitHub Activity**
 - **Stats Grid**: Public repos, stars, forks, contributions
 - **Weekly Chart**: Bar chart showing activity by day
@@ -473,28 +527,101 @@ Player Makes Move
 
 ---
 
-## 🎮 Tic Tac Toe Game Features
+## 🎮 Games Collection Overview
 
-### **Single Player Mode**
+### **Game Launcher Interface** ⭐ NEW
+The unified game selection interface that users see when they click "Play Games" from the portfolio:
+- Beautiful dual-card layout with game information
+- Tic Tac Toe card (Browser-based)
+- Snake Game card (Desktop-based)
+- Interactive hover animations
+- Clear setup instructions for each game
+
+### **Tic Tac Toe Game** (React + TypeScript)
+
+#### **Single Player Mode**
 - Play against AI bot
 - AI uses Minimax algorithm for optimal moves
-- Plays at medium difficulty (fast response)
+- Nearly unbeatable difficulty
 - Win, lose, or draw outcomes
+- Real-time board status display
 
-### **Multi Player Mode**
+#### **Multiplayer Mode**
 - Local multiplayer on same device
-- X vs O turns
-- Visual indication of current player
-- Same win/draw detection
+- X vs O turn-based gameplay
+- Visual indication of current player turn
+- Same win/draw detection logic
+- Perfect for challenging a friend
 
-### **Game Logic**
+#### **Game Logic - Minimax Algorithm**
 ```typescript
-// Minimax Algorithm
-// - Evaluates all possible board states
-// - Recursively finds best move
+// Algorithm: Minimax with Alpha-Beta Pruning
+// - Evaluates all possible board states recursively
 // - Scores: +10 (AI wins), 0 (draw), -10 (player wins)
-// - Used for single-player AI
+// - Finds the best move for AI
+// - Time Complexity: O(9!) = O(362,880) worst case
+// - In practice: Optimized with memoization
 ```
+
+#### **UI/UX Features**
+- Dark slate theme matching portfolio (slate-900/950)
+- Blue-purple gradient accents
+- Interactive game board with hover states
+- Real-time status showing current player
+- "Play Again" button after game ends
+- Smooth animations and transitions
+
+### **Python Snake Game** (Python + Pygame)
+
+#### **Location & Files**
+```
+games/
+├── snake_game.py          # Main game (400+ lines)
+├── launcher.py            # Python menu system
+├── launcher.bat           # Windows batch launcher
+├── setup.bat              # Pygame auto-installer
+└── README.md              # Full documentation
+```
+
+#### **Gameplay Features**
+- Classic snake movement mechanics
+- Apple collection for score
+- Progressive difficulty (speed increases with score)
+- Grid-based collision detection
+- Pause/Resume during gameplay
+- Restart functionality
+- Score tracking and statistics display
+
+#### **Visual Features**
+- Color-coded game elements (snake, apple, barriers)
+- Smooth animation at 60+ FPS
+- Clear score and difficulty display
+- Game state indicators (Playing, Paused, Game Over)
+
+#### **Technical Stack**
+- **Language**: Python 3.8+
+- **Framework**: Pygame (Game engine)
+- **Features**: 2D graphics, real-time input, collision detection
+- **Performance**: Optimized rendering loop
+
+#### **Setup Instructions**
+```bash
+# Automatic setup (Windows)
+games/launcher.bat
+
+# Manual setup (Cross-platform)
+pip install pygame
+python games/snake_game.py
+
+# Interactive menu (if launcher.py installed)
+python games/launcher.py
+```
+
+#### **Controls**
+- **WASD** or **Arrow Keys**: Move snake
+- **Space**: Pause/Resume
+- **R**: Restart game
+- **Esc**: Quit
 
 ---
 
@@ -641,12 +768,200 @@ This project is open source and available under the MIT License.
 
 ---
 
+## 🔧 Project Maintenance Guide
+
+### **Code Quality Standards**
+
+#### **TypeScript Practices**
+- Always use strict mode (`strict: true` in tsconfig.json)
+- Define interfaces for all component props
+- Use `React.FC<Props>` for functional components
+- Avoid `any` type - use `unknown` with type guards if needed
+- Document complex types with JSDoc comments
+
+#### **Component Organization**
+```
+src/
+├── components/              (Reusable UI components)
+│   ├── GameLauncher.tsx    (Game selection interface)
+│   ├── Welcome.tsx         (Game mode selection)
+│   ├── TicTacToe.tsx       (Game logic and board)
+│   └── Portfolio/          (Portfolio sub-components)
+│       └── *.tsx           (Individual portfolio sections)
+├── App.tsx                 (Main router/orchestrator)
+├── main.tsx                (Entry point)
+└── index.css               (Global styles)
+```
+
+#### **Naming Conventions**
+- **Components**: PascalCase (e.g., `GameLauncher.tsx`)
+- **Functions**: camelCase (e.g., `handleSelectGame`)
+- **Variables**: camelCase (e.g., `appMode`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_BOARD_SIZE`)
+- **Interfaces**: Prefix with `I` or use `Props` suffix (e.g., `GameLauncherProps`)
+
+### **Code Review Checklist**
+
+Before committing code:
+- [ ] TypeScript compiles without errors (`npm run build`)
+- [ ] All imports are used (no unused variables)
+- [ ] Components follow naming conventions
+- [ ] Props are properly typed with interfaces
+- [ ] Animations use Framer Motion patterns
+- [ ] Responsive classes included (mobile-first)
+- [ ] Accessibility considered (alt text, ARIA labels)
+- [ ] No console.log() statements in production code
+- [ ] Git commit message is descriptive
+
+### **Adding New Features**
+
+1. **Create Component File**
+   ```bash
+   # Create new component in appropriate folder
+   touch src/components/MyComponent.tsx
+   ```
+
+2. **Define Interface**
+   ```typescript
+   interface MyComponentProps {
+     title: string;
+     onAction?: (value: string) => void;
+   }
+   ```
+
+3. **Implement Component**
+   ```typescript
+   const MyComponent: React.FC<MyComponentProps> = ({ title, onAction }) => {
+     // Component code
+   };
+   ```
+
+4. **Export Component**
+   ```typescript
+   export default MyComponent;
+   ```
+
+5. **Test Build**
+   ```bash
+   npm run build  # Verify no errors
+   ```
+
+6. **Commit & Push**
+   ```bash
+   git add .
+   git commit -m "Add MyComponent feature"
+   git push origin main
+   ```
+
+### **Updating Dependencies**
+
+1. **Check for Updates**
+   ```bash
+   npm outdated
+   ```
+
+2. **Update Specific Package**
+   ```bash
+   npm update package-name@latest
+   ```
+
+3. **Test Build**
+   ```bash
+   npm run build
+   npm run type-check
+   ```
+
+4. **Commit Update**
+   ```bash
+   git commit -m "Update package-name to version X.X.X"
+   ```
+
+### **Performance Optimization**
+
+- Keep component re-renders minimal
+- Use `React.memo` for expensive components
+- Lazy load components with `React.lazy` if needed
+- Monitor bundle size: `npm run build` shows gzipped size
+- Target: Keep JS bundle under 350KB gzipped
+
+### **Documentation Updates**
+
+Update DOCS.md when:
+- Adding new components or features
+- Changing architecture or data flow
+- Adding new games or portfolio sections
+- Updating deployment process
+- Changes to TypeScript configuration
+
+### **Git Workflow**
+
+1. **For New Features**
+   ```bash
+   git checkout -b feature/feature-name
+   # ... make changes ...
+   git commit -m "Add feature: description"
+   git push origin feature/feature-name
+   ```
+
+2. **For Bug Fixes**
+   ```bash
+   git checkout -b bugfix/bug-name
+   # ... make changes ...
+   git commit -m "Fix: description"
+   git push origin bugfix/bug-name
+   ```
+
+3. **Merge to Main**
+   - Create Pull Request on GitHub
+   - Verify build passes
+   - Merge to main
+   - Vercel auto-deploys
+
+### **Common Maintenance Tasks**
+
+#### **Add New Portfolio Section**
+1. Create component in `src/components/Portfolio/SectionName.tsx`
+2. Add to Portfolio.tsx layout
+3. Update theme colors to match (slate-900 base, blue-purple accents)
+4. Update DOCS.md with new section info
+5. Build and test
+
+#### **Update Game Logic**
+1. Modify `src/components/TicTacToe.tsx` for browser game
+2. Modify `games/snake_game.py` for desktop game
+3. Test functionality
+4. Update Games.tsx showcase if needed
+5. Commit with descriptive message
+
+#### **Change Theme Colors**
+1. Update Tailwind classes in components
+2. Update `tailwind.config.js` if changing custom colors
+3. Verify contrast ratios for accessibility
+4. Build and test all pages
+
+### **Monitoring & Logs**
+
+- **Build Logs**: Check `npm run build` output for warnings
+- **Type Errors**: Run `npm run type-check` to catch TS errors
+- **Browser Console**: Check DevTools console for runtime errors
+- **Network Tab**: Monitor asset loading and API calls
+
+### **Backup & Version Control**
+
+- Push to GitHub regularly: `git push origin main`
+- Tag releases: `git tag v1.0.0 && git push origin v1.0.0`
+- Keep commit history clean and descriptive
+- Review git log: `git log --oneline -10`
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to fork and submit pull requests.
 
 ---
 
-**Last Updated**: March 7, 2024
+**Last Updated**: March 7, 2026
 **Project Status**: Active Development ✅
+**Latest Features**: Game Launcher Interface, Python Snake Game, Dark Theme
 
