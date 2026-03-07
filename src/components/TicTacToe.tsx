@@ -168,10 +168,10 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ mode, onBack }) => {
   const isBoardFull = board.every((cell) => cell !== null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Animated background */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 right-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
 
       <div className="relative z-10 w-full max-w-2xl">
         {/* Header */}
@@ -179,31 +179,31 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ mode, onBack }) => {
           <h1 className="text-4xl md:text-5xl font-black text-white mb-2 drop-shadow-lg">
             Tic Tac Toe
           </h1>
-          <p className="text-lg text-white/70">
-            {mode === 'single' ? '🤖 Playing vs Bot' : '👥 Duel Mode'}
+          <p className="text-lg text-slate-400">
+            {mode === 'single' ? '🤖 Playing vs Bot' : '👥 Multiplayer Mode'}
           </p>
         </div>
 
         {/* Game Status */}
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 mb-8 text-center">
+        <div className="bg-slate-800/50 backdrop-blur-md rounded-2xl p-6 border border-slate-700 mb-8 text-center">
           {!gameOver ? (
             <div>
-              <p className="text-white/70 text-sm mb-2">Current Player</p>
+              <p className="text-slate-400 text-sm mb-2">Current Player</p>
               <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
                 {currentPlayer === 'X' ? '❌' : '⭕'}
               </p>
             </div>
           ) : winner ? (
             <div>
-              <p className="text-white/70 text-sm mb-2">🎉 Game Over!</p>
-              <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">
+              <p className="text-slate-400 text-sm mb-2">🎉 Game Over!</p>
+              <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
                 {winner === 'X' ? (mode === 'single' ? 'You Won! 🏆' : 'X Won! 🏆') : mode === 'single' ? 'Bot Won!' : 'O Won! 🏆'}
               </p>
             </div>
           ) : isBoardFull ? (
             <div>
-              <p className="text-white/70 text-sm mb-2">Game Over</p>
-              <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
+              <p className="text-slate-400 text-sm mb-2">Game Over</p>
+              <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
                 It's a Draw! 🤝
               </p>
             </div>
@@ -211,19 +211,19 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ mode, onBack }) => {
         </div>
 
         {/* Game Board */}
-        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl mb-8">
+        <div className="bg-slate-800/50 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-slate-700 shadow-2xl mb-8">
           <div className="grid grid-cols-3 gap-3 md:gap-4">
             {board.map((cell, index) => (
               <button
                 key={index}
                 onClick={() => (mode === 'single' ? handleClick(index) : handleMultiClick(index))}
-                className="aspect-square bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl border-2 border-white/20 hover:border-white/50 hover:bg-gradient-to-br hover:from-slate-600 hover:to-slate-700 transition-all duration-300 transform hover:scale-105 text-5xl font-bold text-white shadow-lg hover:shadow-xl cursor-pointer group relative overflow-hidden"
+                className="aspect-square bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl border-2 border-slate-600 hover:border-blue-400 hover:bg-gradient-to-br hover:from-slate-600 hover:to-slate-700 transition-all duration-300 transform hover:scale-105 text-5xl font-bold text-white shadow-lg hover:shadow-xl cursor-pointer group relative overflow-hidden"
               >
                 <span className="relative z-10">
                   {cell === 'X' ? '❌' : cell === 'O' ? '⭕' : ''}
                 </span>
                 {!cell && (
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 )}
               </button>
             ))}
@@ -235,22 +235,17 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ mode, onBack }) => {
           {gameOver && (
             <button
               onClick={resetGame}
-              className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-300"
             >
               Play Again 🎮
             </button>
           )}
           <button
             onClick={onBack}
-            className="px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+            className="px-8 py-3 bg-gradient-to-r from-slate-700 to-slate-600 text-white font-bold rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-300 border border-slate-600 hover:border-blue-400"
           >
             Back Home 🏠
           </button>
-        </div>
-
-        {/* Game Info */}
-        <div className="mt-8 text-center text-white/50 text-sm">
-          <p>Made with ❤️ for Gaurav</p>
         </div>
       </div>
     </div>
