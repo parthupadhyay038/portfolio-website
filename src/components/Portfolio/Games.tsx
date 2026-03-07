@@ -31,7 +31,7 @@ const Games: React.FC<GamesProps> = ({ onPlayGame }) => {
   const games = [
     {
       title: '🐍 Snake Game',
-      description: 'Classic snake gameplay built with Python & Pygame',
+      description: 'Classic snake gameplay built with Python & Pygame (Desktop Game)',
       features: [
         'Smooth 2D graphics and animations',
         'Progressive difficulty system',
@@ -41,7 +41,7 @@ const Games: React.FC<GamesProps> = ({ onPlayGame }) => {
       ],
       tech: ['Python', 'Pygame', 'Game Logic', 'Collision Detection'],
       location: 'games/snake_game.py',
-      cta: 'Play Snake',
+      cta: 'View Instructions',
       color: 'from-green-400 to-emerald-600',
       icon: '🐍',
     },
@@ -186,45 +186,53 @@ const Games: React.FC<GamesProps> = ({ onPlayGame }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Snake Game */}
             <div>
-              <h4 className="text-lg font-semibold text-blue-400 mb-4">🐍 Snake Game</h4>
+              <h4 className="text-lg font-semibold text-green-400 mb-4">🐍 Snake Game (Desktop)</h4>
               <div className="space-y-3 text-slate-300 text-sm">
-                <p className="flex items-start gap-2">
-                  <span className="text-blue-400 mt-1">1.</span>
-                  <span>Install Python: <code className="bg-slate-900 px-2 py-1 rounded text-xs">pip install pygame</code></span>
-                </p>
-                <p className="flex items-start gap-2">
-                  <span className="text-blue-400 mt-1">2.</span>
-                  <span>Run the game: <code className="bg-slate-900 px-2 py-1 rounded text-xs">python games/snake_game.py</code></span>
-                </p>
-                <p className="flex items-start gap-2">
-                  <span className="text-blue-400 mt-1">3.</span>
-                  <span>Or use launcher: <code className="bg-slate-900 px-2 py-1 rounded text-xs">games/launcher.bat</code></span>
-                </p>
-                <p className="pt-2 text-slate-400 text-xs">
-                  Controls: WASD/Arrows • Space: Pause • R: Restart • Esc: Quit
-                </p>
+                <div className="p-3 rounded bg-slate-800/50 border border-slate-700 mb-4">
+                  <p className="text-xs text-slate-400 mb-2">⚙️ <strong>Setup & Run:</strong></p>
+                  <p className="flex items-start gap-2 mb-2">
+                    <span className="text-green-400 mt-1">1.</span>
+                    <span>Install: <code className="bg-slate-900 px-2 py-1 rounded text-xs">pip install pygame</code></span>
+                  </p>
+                  <p className="flex items-start gap-2 mb-2">
+                    <span className="text-green-400 mt-1">2.</span>
+                    <span>Run: <code className="bg-slate-900 px-2 py-1 rounded text-xs">python games/snake_game.py</code></span>
+                  </p>
+                  <p className="flex items-start gap-2">
+                    <span className="text-green-400 mt-1">3.</span>
+                    <span>Or use launcher: <code className="bg-slate-900 px-2 py-1 rounded text-xs">games/launcher.bat</code></span>
+                  </p>
+                </div>
+                <div className="p-3 rounded bg-slate-700/30 border border-slate-600">
+                  <p className="text-xs text-slate-400 mb-2">🎮 <strong>Controls:</strong></p>
+                  <p className="text-xs">WASD or Arrow Keys • <strong>Space:</strong> Pause • <strong>R:</strong> Restart • <strong>Esc:</strong> Quit</p>
+                </div>
               </div>
             </div>
 
             {/* Tic Tac Toe */}
             <div>
-              <h4 className="text-lg font-semibold text-cyan-400 mb-4">🎯 Tic Tac Toe</h4>
+              <h4 className="text-lg font-semibold text-cyan-400 mb-4">🎯 Tic Tac Toe (Browser)</h4>
               <div className="space-y-3 text-slate-300 text-sm">
-                <p className="flex items-start gap-2">
-                  <span className="text-cyan-400 mt-1">1.</span>
-                  <span>Click "Tic Tac Toe" button in mode switcher</span>
-                </p>
-                <p className="flex items-start gap-2">
-                  <span className="text-cyan-400 mt-1">2.</span>
-                  <span>Choose game mode: Single Player or Multiplayer</span>
-                </p>
-                <p className="flex items-start gap-2">
-                  <span className="text-cyan-400 mt-1">3.</span>
-                  <span>Click cells to make your move</span>
-                </p>
-                <p className="pt-2 text-slate-400 text-xs">
-                  AI uses Minimax algorithm • Nearly unbeatable!
-                </p>
+                <div className="p-3 rounded bg-slate-800/50 border border-slate-700 mb-4">
+                  <p className="text-xs text-slate-400 mb-2">🎮 <strong>How to Play:</strong></p>
+                  <p className="flex items-start gap-2 mb-2">
+                    <span className="text-cyan-400 mt-1">1.</span>
+                    <span>Click "Play Games" button (bottom-right)</span>
+                  </p>
+                  <p className="flex items-start gap-2 mb-2">
+                    <span className="text-cyan-400 mt-1">2.</span>
+                    <span>Choose: Single Player (vs AI) or Multiplayer</span>
+                  </p>
+                  <p className="flex items-start gap-2">
+                    <span className="text-cyan-400 mt-1">3.</span>
+                    <span>Click cells to make your move</span>
+                  </p>
+                </div>
+                <div className="p-3 rounded bg-slate-700/30 border border-slate-600">
+                  <p className="text-xs text-slate-400 mb-2">🤖 <strong>AI Difficulty:</strong></p>
+                  <p className="text-xs">Minimax Algorithm • Nearly unbeatable on Single Player mode</p>
+                </div>
               </div>
             </div>
           </div>
