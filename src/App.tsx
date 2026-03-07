@@ -16,6 +16,16 @@ const App: React.FC = () => {
     setGameMode(mode);
   };
 
+  const handlePlayGame = (gameType: 'snake' | 'tictactoe') => {
+    if (gameType === 'tictactoe') {
+      setAppMode('game');
+      setGameMode('welcome');
+    } else if (gameType === 'snake') {
+      // Open snake game (external or guide)
+      window.open('https://github.com/parthupadhyay038/portfolio-website/tree/main/games', '_blank');
+    }
+  };
+
   const handleBack = () => {
     setGameMode('welcome');
   };
@@ -66,7 +76,7 @@ const App: React.FC = () => {
       )}
 
       {/* Content */}
-      {appMode === 'portfolio' && <Portfolio />}
+      {appMode === 'portfolio' && <Portfolio onPlayGame={handlePlayGame} />}
 
       {appMode === 'game' && (
         <div className="w-full min-h-screen">

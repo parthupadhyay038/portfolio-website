@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Gamepad2, Code2, Play } from 'lucide-react';
 
-const Games: React.FC = () => {
+interface GamesProps {
+  onPlayGame?: (gameType: 'snake' | 'tictactoe') => void;
+}
+
+const Games: React.FC<GamesProps> = ({ onPlayGame }) => {
+  const [selectedGame, setSelectedGame] = useState<'snake' | 'tictactoe' | null>(null);
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -149,16 +154,13 @@ const Games: React.FC = () => {
 
                 {/* CTA Button */}
                 <a
-                  href={index === 0 ? "#contact" : "#"}
+                  href="#!"
                   onClick={(e) => {
-                    if (index === 1) {
-                      e.preventDefault();
-                      // Switch to Tic Tac Toe game
-                      const event = new CustomEvent('switchToGame', { detail: { mode: 'game' } });
-                      window.dispatchEvent(event);
-                    }
+                    e.preventDefault();
+                    setSelectedGame(index === 0 ? 'snake' : 'tictactoe');
+                    onPlayGame?.(index === 0 ? 'snake' : 'tictactoe');
                   }}
-                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r ${game.color} hover:shadow-lg transition-all duration-300 text-white font-semibold`}
+                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r ${game.color} hover:shadow-lg transition-all duration-300 text-white font-semibold cursor-pointer`}
                 >
                   <Play size={18} />
                   {game.cta}

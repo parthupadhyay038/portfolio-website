@@ -9,7 +9,11 @@ import GitHubActivity from './GitHubActivity';
 import Games from './Games';
 import Contact from './Contact';
 
-const Portfolio: React.FC = () => {
+interface PortfolioProps {
+  onPlayGame?: (gameType: 'snake' | 'tictactoe') => void;
+}
+
+const Portfolio: React.FC<PortfolioProps> = ({ onPlayGame }) => {
   return (
     <div className="bg-slate-950 min-h-screen">
       {/* Navigation */}
@@ -52,7 +56,7 @@ const Portfolio: React.FC = () => {
         <Projects />
         <Architecture />
         <Terminal />
-        <Games />
+        <Games onPlayGame={onPlayGame} />
         <GitHubActivity />
         <Contact />
       </main>
