@@ -20,7 +20,7 @@ const InteractiveCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef<MousePos>({ x: 0, y: 0 });
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
 
   const colors = ['#3b82f6', '#1e40af', '#9333ea', '#a855f7', '#7c3aed', '#60a5fa', '#06b6d4'];
 

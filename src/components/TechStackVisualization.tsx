@@ -22,7 +22,7 @@ const TechStackVisualization: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nodesRef = useRef<Node[]>([]);
   const chargesRef = useRef<Charge[]>([]);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const techStacks = {
