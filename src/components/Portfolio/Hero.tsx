@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, FileText, Code2 } from 'lucide-react';
+import InteractiveCanvas from '../InteractiveCanvas';
 
 const Hero: React.FC = () => {
   const containerVariants = {
@@ -36,8 +37,13 @@ const Hero: React.FC = () => {
 
   return (
     <section className="relative min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 flex items-center justify-center overflow-hidden px-4 py-20">
+      {/* Interactive Canvas Background */}
+      <div className="absolute inset-0 z-0">
+        <InteractiveCanvas />
+      </div>
+
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden z-1">
         <motion.div
           className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"
           animate={{

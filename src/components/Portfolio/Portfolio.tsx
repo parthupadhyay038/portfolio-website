@@ -5,6 +5,7 @@ import TechStack from './TechStack';
 import Projects from './Projects';
 import Architecture from './Architecture';
 import Terminal from './Terminal';
+import CanvasVisualizations from './CanvasVisualizations';
 import GitHubActivity from './GitHubActivity';
 import Games from './Games';
 import Contact from './Contact';
@@ -28,13 +29,13 @@ const Portfolio: React.FC<PortfolioProps> = ({ onPlayGame }) => {
             Parth
           </a>
           <div className="hidden md:flex gap-8">
-            {['hero', 'techstack', 'projects', 'architecture', 'terminal', 'games', 'github', 'contact'].map((item) => (
+            {['hero', 'techstack', 'projects', 'architecture', 'terminal', 'visualizations', 'games', 'github', 'contact'].map((item) => (
               <a
                 key={item}
                 href={`#${item}`}
                 className="text-slate-300 hover:text-white transition-colors capitalize font-medium text-sm"
               >
-                {item === 'techstack' ? 'Tech Stack' : item === 'github' ? 'GitHub' : item}
+                {item === 'techstack' ? 'Tech Stack' : item === 'github' ? 'GitHub' : item === 'visualizations' ? 'Canvas' : item}
               </a>
             ))}
           </div>
@@ -56,6 +57,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onPlayGame }) => {
         <Projects />
         <Architecture />
         <Terminal />
+        <CanvasVisualizations />
         <Games onPlayGame={onPlayGame} />
         <GitHubActivity />
         <Contact />
