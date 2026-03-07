@@ -22,36 +22,48 @@ const App: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen relative">
-      {/* Mode Switcher */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="fixed top-4 left-4 right-4 z-[100] flex justify-center md:justify-start gap-3 px-4"
-      >
-        <button
-          onClick={() => setAppMode('portfolio')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
-            appMode === 'portfolio'
-              ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/50'
-              : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'
-          }`}
+      {/* Mode Switcher - Fixed at bottom right for non-overlapping */}
+      {appMode === 'portfolio' && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+          className="fixed bottom-8 right-8 z-40 flex gap-3"
         >
-          <Briefcase size={18} />
-          <span className="hidden sm:inline">Portfolio</span>
-        </button>
-        <button
-          onClick={() => setAppMode('game')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
-            appMode === 'game'
-              ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/50'
-              : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'
-          }`}
+          <button
+            onClick={() => setAppMode('portfolio')}
+            className="flex items-center gap-2 px-4 py-3 rounded-lg font-semibold transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/50 cursor-default"
+          >
+            <Briefcase size={18} />
+            <span className="hidden sm:inline">Portfolio</span>
+          </button>
+          <button
+            onClick={() => setAppMode('game')}
+            className="flex items-center gap-2 px-4 py-3 rounded-lg font-semibold transition-all duration-300 bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 shadow-lg hover:shadow-blue-500/50"
+          >
+            <Gamepad2 size={18} />
+            <span className="hidden sm:inline">Play Games</span>
+          </button>
+        </motion.div>
+      )}
+
+      {/* Game Mode Switcher */}
+      {appMode === 'game' && (
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="fixed top-4 left-4 z-50 flex gap-2"
         >
-          <Gamepad2 size={18} />
-          <span className="hidden sm:inline">Tic Tac Toe</span>
-        </button>
-      </motion.div>
+          <button
+            onClick={() => setAppMode('portfolio')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700"
+          >
+            <Briefcase size={16} />
+            <span className="hidden sm:inline">Back</span>
+          </button>
+        </motion.div>
+      )}
 
       {/* Content */}
       {appMode === 'portfolio' && <Portfolio />}

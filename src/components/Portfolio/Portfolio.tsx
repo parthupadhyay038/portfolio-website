@@ -6,6 +6,7 @@ import Projects from './Projects';
 import Architecture from './Architecture';
 import Terminal from './Terminal';
 import GitHubActivity from './GitHubActivity';
+import Games from './Games';
 import Contact from './Contact';
 
 const Portfolio: React.FC = () => {
@@ -23,7 +24,7 @@ const Portfolio: React.FC = () => {
             Parth
           </a>
           <div className="hidden md:flex gap-8">
-            {['hero', 'techstack', 'projects', 'architecture', 'terminal', 'github', 'contact'].map((item) => (
+            {['hero', 'techstack', 'projects', 'architecture', 'terminal', 'games', 'github', 'contact'].map((item) => (
               <a
                 key={item}
                 href={`#${item}`}
@@ -51,6 +52,7 @@ const Portfolio: React.FC = () => {
         <Projects />
         <Architecture />
         <Terminal />
+        <Games />
         <GitHubActivity />
         <Contact />
       </main>
